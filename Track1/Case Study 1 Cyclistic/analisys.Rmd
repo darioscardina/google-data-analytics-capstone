@@ -5,6 +5,7 @@ date: "2023-11-24"
 output:
   html_document: 
     toc: yes
+    css: styles.css
   pdf_document: default
 ---
 
@@ -16,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Blablabla
 
-# Setup environment
+## Setup environment
 
 Configuring environment installing and loading necessary libraries:
 
@@ -36,11 +37,12 @@ current_path = rstudioapi::getActiveDocumentContext()$path
 setwd(dirname(current_path ))
 ```
 
+## Load dataset
 Set number of files to load (1 = just load January 2022, 12 = complete analysis of 2022).
 Note that files are sorted by name, so if num_files = 3, it will load first trimester of 2022.
 Using lower num_files speed-up analysis.
 ```{r choose number of files to load}
-num_files_to_load = 3
+num_files_to_load = 1
 ```
 
 Load csv files and merge the dataset in a single dataframe:
