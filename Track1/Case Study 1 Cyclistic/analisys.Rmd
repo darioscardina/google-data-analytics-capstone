@@ -85,20 +85,27 @@ They offer also inclusive bycicles (used by 8% of customers).
 The most part of customers ride for leisure, but about 30% use them to commute to work.
 
 They offer 3 different pricing plans:
+The goal of this section is to define a clear statement of business task.
 
 * single-ride pass (casual rider)
 * full-day pass (casual rider)
 * annual membership (Cyclistic membership)
+The first step consist to identify the problem we're trying to solve, starting 
+from considerations made by our 'imaginary' colleagues.
 
 In order to garantuee the future growth, Company's stakeholders think that a marketing 
 campaign to convert casual riders to Cyclistyc Members would be the key of success.
 
 This hypotesis? is based on the following assumption:
+This hypotesis is based on the following assumption:
 
 * Cyclistic’s finance analysts have concluded that **annual members are much more profitable than casual riders**
 * **Converting casual riders into annual members** will lead to growth
+* Cyclistic’s finance analysts have concluded that *annual members are much more profitable than casual riders*
+* *Converting casual riders into annual members* will lead to growth
 
 In our case we have to answer the following question: How do annual members and casual riders use Cyclistic bikes differently?
+In our case we have to answer the following question: *How do annual members and casual riders use Cyclistic bikes differently?*
 The problem we are trying to solve is to identify is understand if there is a different use of the bikes between members and casual riders in terms of how, when and why they use the service.
 Knowing that could be useful to understand why casual riders prefer to use single or daily pass instead of buying membership.
 
