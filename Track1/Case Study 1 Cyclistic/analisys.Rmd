@@ -16,6 +16,19 @@ knitr::opts_chunk$set(echo = TRUE)
 # Intro
 
 Blablabla
+This is my cap-stone project documentation for Cyclistic case study from the Google Data Analytics Course. 
+
+## Scenario
+
+*Cyclistic* is a bike-sharing company with a fleet of geotracked bycicles locked into a network of different stations in Chicago.
+They offer also inclusive bycicles (used by 8% of customers).
+The most part of customers ride for leisure, but about 30% use them to commute to work.
+
+They offer 3 different pricing plans:
+
+* single-ride pass (casual rider)
+* full-day pass (casual rider)
+* annual membership (Cyclistic membership)
 
 ## Setup environment
 
