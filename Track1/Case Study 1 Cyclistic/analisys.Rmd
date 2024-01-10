@@ -1,0 +1,211 @@
+---
+title: 'Cyclistic: comparing annual members vs. casual riders'
+author: "Dario Scardina"
+date: "2023-11-24"
+output:
+  html_document: 
+    toc: yes
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Intro
+
+Configuring environment installing and loading necessary libraries:
+
+```{r setup environment}
+print("ciao")
+```
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## How do annual members and casual riders use Cyclistic bikes differently?
+In order to answer the question, it is necessary to produce a report with the following deliverables:
+
+1. A clear statement of business task
+2. A description of all data sources used
+3. Documentation of any cleaning or manipulation of data
+4. An analysis summary
+5. Supporting visualizations and key findings
+6. Top three reccomendations bases on the analysis
+
+## Ask phase
+In this phase the first step consist to identify the problem we're trying to solve.
+*Cyclistic* is a bike-sharing company with a fleet of geotracked bycicles locked into a network of different stations in Chicago.
+They offer also inclusive bycicles (used by 8% of customers).
+The most part of customers ride for leisure, but about 30% use them to commute to work.
+
+They offer 3 different pricing plans:
+
+* single-ride pass (casual rider)
+* full-day pass (casual rider)
+* annual membership (Cyclistic membership)
+
+In order to garantuee the future growth, Company's stakeholders think that a marketing 
+campaign to convert casual riders to Cyclistyc Members would be the key of success.
+
+This hypotesis? is based on the following assumption:
+
+* Cyclistic’s finance analysts have concluded that **annual members are much more profitable than casual riders**
+* **Converting casual riders into annual members** will lead to growth
+
+In our case we have to answer the following question: How do annual members and casual riders use Cyclistic bikes differently?
+The problem we are trying to solve is to identify is understand if there is a different use of the bikes between members and casual riders in terms of how, when and why they use the service.
+Knowing that could be useful to understand why casual riders prefer to use single or daily pass instead of buying membership.
+
+CLEAR STATEMENT OF BUSINESS TASK
+
+## Prepare
+
+### Guiding questions
+
+#### Where the data is located?
+
+You will use Cyclistic’s historical trip data to analyze and identify trends. Download the Cyclistic trip data here. (Note: The datasets
+have a di erent name because Cyclistic is a  ctional company. For the purposes of this case study, the datasets are appropriate
+and will enable you to answer the business questions).
+
+#### How data is organized
+
+In the website there is a list of zip files. Each of the zip refers to:
+
+* tripdata cos'è? Useremo l'anno "completo" più recente. 2022
+* Stations: cartella compressa che contiene 2 csv uno con i trips e uno con le stations. stations include identificativo con coordinate geografiche e altre info.
+* Trips: sembrano avere la stessa struttura di trip data. Contengono i dati per quarter.
+
+Each file seems to refer to a specific period (fare verifica su singolo file) that could be (a seconda del caso):
+
+* YEAR-MONTH
+* YEAR-QUARTER
+* YEAR-SEMESTER: union of two consecutive quarters
+* YEAR
+
+Abbiamo data last modified e dimensione del file.
+
+#### Are there issues with bias or credibility in this data? Does your data ROCCC?
+
+Data is **O**riginal: it is provided by Motivate International Inc. Lyft Bikes and Scooters, LLC (“Bikeshare”) that operates the City of Chicago’s (“City”) Divvy bicycle sharing service through its official website.
+Data is **C**omprehensive: it contains all the information necessary for this analysis. In particular, as reported in the source webpage https://divvybikes-marketing-staging.lyft.net/system-data, for a brief recap:
+Each trip is anonymized and includes:
+
+* Trip start day and time
+* Trip end day and time
+* Trip start station
+* Trip end station
+* Rider type (Member, Single Ride, and Day Pass)
+
+Data is **C**urrent: dataset is constantly updated every month with last data produced.
+
+Data is **C**ited: it is provided by the bike-sharing company that operates its business on Chicago (U.S.).
+
+
+#### How are you addressing licensing, privacy, security, and accessibility?
+
+The data has been made available by Motivate International Inc. under this license. vedi pdf.
+The data for 2022 does not contains any sensible or personal information but only info about trips.
+See info https://divvybikes-marketing-staging.lyft.net/system-data
+
+#### How did you verify the data’s integrity?
+
+#### How does it help you answer your question?
+
+#### Are there any problems with the data?
+
+* Molti file da scaricare: come automatizzare?
+* Alcuni csv troppo pesanti (non gestibili da Gsheet)
+* csv del 2022 alcuni hanno "" altri no. Capire come R li gestisce.
+
+### Key tasks
+
+1. Download and store data appropriately
+2. Identify how it's organized
+3. Sort and filter the data
+4. Determine the credibility of the data
+
+### Deliverable 
+
+A description of all data sources used
+
+## Process
+ 
+### Guiding questions
+
+* What tools are you choosing and why? Gsheet cannot handle all the csv files because some are too big (even if loaded, managing is really hard: waiting time ...)
+* Have you ensured your data’s integrity? 
+* What steps have you taken to ensure that your data is clean? 
+
+First check when reading csv:
+
+* chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_station_name, end_station_id, member_casual
+* dbl  (4): start_lat, start_lng, end_lat, end_lng
+* dttm (2): started_at, ended_at
+
+1. ride_id: must be a guid of 16 characters.
+2. rideable_type: 3 values electric, classic or docked bike.
+3. started_at and ended_at: timestamps
+4. start_station_ame and end_station_name: strings
+5. start_station_id and end_station_id: id not clear (to investigate: sometimes is only 3 digits, sometimes starts with 2 letters)
+6. _lng fields: valid numeric format for latitude and longitude (from -90 to 90)
+
+* How can you verify that your data is clean and ready to analyze?
+
+Innanzi tutto partiamo dal seguente comando che ci da visione d'insieme del dataset:
+```{r}
+skim(df)
+```
+Per il gruppo di colonne character, la prima cosa che salta all'occhio è che il complete rate non è 1 (quindi abbiamo dei missing values).
+
+Consideriamo intanto la start_station.
+
+Eseguiamo il comando
+
+missing_start_station_geolocation <- df %>%  filter(is.na(start_station_name)) %>% select(start_lat, start_lng)
+
+per filtrare tutte le righe 
+
+* Have you documented your cleaning process so you can review and share those results?
+
+### Key tasks
+1. Check the data for errors.
+2. Choose your tools.
+3. Transform the data so you can work with it effectively.
+4. Document the cleaning process.
+
+### Deliverable
+Documentation of any cleaning or manipulation of data
+
+## Analyze
+
+### Guiding questions
+
+* How should you organize your data to perform analysis on it?
+* Has your data been properly formaed?
+* What surprises did you discover in the data?
+* What trends or relationships did you nd in the data?
+* How will these insights help answer your business questions?
+
+### Key tasks
+1. Aggregate your data so it’s useful and accessible.
+2. Organize and format your data.
+3. Perform calculations.
+4. Identify trends and relationships.
+
+### Deriverable
+A summary of the analysis.
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+
