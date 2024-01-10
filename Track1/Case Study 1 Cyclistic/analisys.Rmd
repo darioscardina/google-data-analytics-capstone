@@ -17,17 +17,29 @@ knitr::opts_chunk$set(echo = TRUE)
 Configuring environment installing and loading necessary libraries:
 
 ```{r setup environment}
-print("ciao")
+libraries <- c("tidyverse", "dplyr", "plyr", "readr", "validate", "here", "skimr", "janitor")
+
+missing_libraries <- libraries[!(libraries %in% installed.packages()[,"Package"])]
+if(length(missing_libraries) > 0) {
+  install.packages(missing_libraries)
+}
+
+lapply(libraries, library, character.only = TRUE)
+```
+Set current working directory:
+```{r set working directory}
+current_path = rstudioapi::getActiveDocumentContext()$path 
+setwd(dirname(current_path ))
 ```
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+Load csv files and merge the dataset in a single dataframe:
+```{r load and merge files}
+df <- list.files(path = "dataset",  # Identify all CSV files in relative folder
+                       pattern = "*.csv", full.names = TRUE) %>% 
+  lapply(read_csv) %>% # Store all files in list: apply read_csv to each csv and combine them into a list
+  imap(~ .x %>% mutate(file_title = .y)) %>% # add column with the index of file TODO enhance with the name of the file
+  bind_rows                                         # Combine data sets into one data set: bind any number of data frames by row
 ```
-
 ## How do annual members and casual riders use Cyclistic bikes differently?
 In order to answer the question, it is necessary to produce a report with the following deliverables:
 
