@@ -15,7 +15,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Intro
 
-This is my cap-stone project documentation for Cyclistic case study from the Google Data Analytics Course. 
+This is my personal documentation for Case Study 1 from the Google Data Analytics Capstone project. 
+You will engage in a comprehensive analysis for a fictitious bike-share company. 
+The goal is to provide insights and recommendations to help the company attract more riders and enhance its overall business strategy.
 
 ## Scenario
 
@@ -28,6 +30,10 @@ They offer 3 different pricing plans:
 * single-ride pass (casual rider)
 * full-day pass (casual rider)
 * annual membership (Cyclistic membership)
+
+The director of marketing believes the company’s future success depends on maximizing the number of annual memberships. 
+In order to garantuee the future growth, Company's stakeholders think that a new marketing 
+campaign to convert casual riders to Cyclistyc Members would be the key of success.
 
 ## Setup environment
 
@@ -82,15 +88,12 @@ In order to answer the question, it is necessary to produce a report with the fo
 The goal of this section is to define a clear statement of business task.
 
 The first step consist to identify the problem we're trying to solve, starting 
-from considerations made by our 'imaginary' colleagues.
-
-In order to garantuee the future growth, Company's stakeholders think that a marketing 
-campaign to convert casual riders to Cyclistyc Members would be the key of success.
-
-This hypotesis is based on the following assumption:
+from assumptions made by our 'imaginary' colleagues:
 
 * Cyclistic’s finance analysts have concluded that *annual members are much more profitable than casual riders*
 * *Converting casual riders into annual members* will lead to growth
+
+Our team was asked to understand how casual riders and annual members use Cyclistic bikes differently.
 
 In our case we have to answer the following question: *How do annual members and casual riders use Cyclistic bikes differently?*
 The problem we are trying to solve is to identify is understand if there is a different use of the bikes between members and casual riders in terms of how, when and why they use the service.
