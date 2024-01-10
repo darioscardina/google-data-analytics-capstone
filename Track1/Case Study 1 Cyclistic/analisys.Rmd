@@ -14,6 +14,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Intro
 
+Blablabla
+
+# Setup environment
+
 Configuring environment installing and loading necessary libraries:
 
 ```{r setup environment}
@@ -32,10 +36,19 @@ current_path = rstudioapi::getActiveDocumentContext()$path
 setwd(dirname(current_path ))
 ```
 
+Set number of files to load (1 = just load January 2022, 12 = complete analysis of 2022).
+Note that files are sorted by name, so if num_files = 3, it will load first trimester of 2022.
+Using lower num_files speed-up analysis.
+```{r choose number of files to load}
+num_files_to_load = 3
+```
+
 Load csv files and merge the dataset in a single dataframe:
 ```{r load and merge files}
 df <- list.files(path = "dataset",  # Identify all CSV files in relative folder
                        pattern = "*.csv", full.names = TRUE) %>% 
+  sort() %>%
+  head(num_files_to_load) %>%
   lapply(read_csv) %>% # Store all files in list: apply read_csv to each csv and combine them into a list
   imap(~ .x %>% mutate(file_title = .y)) %>% # add column with the index of file TODO enhance with the name of the file
   bind_rows                                         # Combine data sets into one data set: bind any number of data frames by row
